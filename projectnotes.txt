@@ -1,0 +1,169 @@
+Title of Project:
+-Scale Navigator
+
+Libraries
+-Node.js, Express, TypeScript, nodemon, ejs
+
+Project description:
+-Build a web app to select musical chords and recommend scales.
+
+Bash commands
+npm run build
+run npm devStart
+run npm start
+npx tailwindcss -i ./src/input.css -o ./src/output.css --watch
+
+
+----------------------------------------------------------------------------------------------------
+Notes
+
+-07_09_24
+Created project folder,
+Ran bash npm init -y,
+Ran bash npm i express,
+Ran bash  npm install --save-dev typescript @types/node @types/express ts-node,
+Created src folder,
+Created index.ts in src folder,
+Created tsconfig.js in root of project folder,
+Created server.ts in src folder,
+Created the folder dist,
+Updated package.json script key "script": { "start": ts-node src/server.ts", "build: "tsc", "server": node dist/server.js" },
+Updated server.ts with import statement for express and defined const app = express(),
+Updated server.ts with app.use(express.json()) method call,
+Updated server.ts with app.get('/', (req: Request, res: Response) => { res.send('Hello World Scale Navigator')}),
+Updated server.ts with app.listen(port, () => { console.log(`Server is running on http://localhost:${port}`)},
+Ran bash npm start and verfied in console Server is running on http://localhost:3000,
+
+
+-07_11_24
+Ran bash npm i nodemon,
+
+-07_12_24
+Ran bash npm i ejs,
+Updated package.json script key "devStart": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts",
+Ran bash npm i --save-dev ts-node-dev,
+Updated package.json "scripts": key with "devStart": "ts-node-dev --respawn --transpile-only src/server.ts",
+
+-07_16_24
+Ran bash i --save-dev @types/ejs,
+Updated src/server.ts added app.set('view engine', 'ejs');,
+Created src/views folder,
+Created src/views/index.ejs,
+Updated src/views/index.ejs with HTML boilerplate,
+Updated src/server.ts with app.set('views', path.join(__dirname, 'views'));,
+Updated src/server.ts with app.get() {    res.render('index', { title: 'Hello World Scale Navigator' });},
+
+-07_18_24
+Ran bash -D tailwindcss,
+npx tailwindcss init,
+Updated tailwind.config.js content: [] array with ./src/**/*.{html,js,ts,tsx}",
+Created src/input.css  with the directives @tailwind base; @tailwind components; @tailwind utilties;,
+Ran bash npx tailwindcss -i ./src/input.css -o ./src/output.css --watch,
+Updated src/server.ts app.use(express.static(path.join(__dirname, '../src')));,
+Updated src/views/index.ejs <link> element to <link rel="stylesheet" href="/output.css">,
+Updated src/views/index.ejs with <script> element,
+Updated src/views/index.ejs with canvas element,
+
+-07_19_24
+Updated src/views/index.ejs with new <script> element to fix white key spacing bug,
+
+-07_22_24
+Created src/drawkeyboard.ts,
+Updated src/views/index.ejs with a <script> element to the drawkeyboard.ts,
+Updated tsconfig.json with key "rootDir": "./src",
+Updated dist/drawkeyboard.ts with type asserition to set the const canvas as HTMLCanvasElement | null,
+Updated dist/drawkeyboard.ts with early returns and if(!canvas) and if(!ctx) to resolve bugs,
+Updated src/views/index.ejs removed <script> element and backed up to notes,
+
+-07_23_24
+Updated src/views/index.ejs <style> element body rule with flex-direction: column, align-items: center,
+Updated src/views/index.ejs <canvas> element attribute properties width="350" and height="100",
+Updated src/drawkeyboard.ts const white and black key definition whiteKeyWidth = 350 / 14, whiteKeyHeight = 100, blackKeyWidth = whiteKeyHeight * 0.6, blackKeyHeight = whiteKeyHeight * 0.6,
+Ran bash git init,
+Created .gitignore,
+Ran bash git remote add origin https://github.com/emprexvest/ScaleNavigator.git,
+Updated .gitignore with node_modules/,
+Ran bash git remote -v,
+
+
+---------------------------------------------------------------------
+
+Backup of code
+
+-07_19_24
+
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const canvas = document.getElementById('piano');
+            const ctx = canvas.getContext('2d');
+
+            const whiteKeyWidth = 50;
+            const whiteKeyHeight = 200;
+            const blackKeyWidth = 30;
+            const blackKeyHeight = 120;
+
+            const keys = [
+                'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B',
+                'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'
+            ];
+
+            // Draw white keys
+            for (let i = 0; i < keys.length; i++) {
+                if (!keys[i].includes('#')) {
+                    ctx.fillStyle = 'white';
+                    ctx.fillRect(i * whiteKeyWidth / 2, 0, whiteKeyWidth, whiteKeyHeight);
+                    ctx.strokeRect(i * whiteKeyWidth / 2, 0, whiteKeyWidth, whiteKeyHeight);
+                }
+            }
+
+            // Draw black keys
+            for (let i = 0; i < keys.length; i++) {
+                if (keys[i].includes('#')) {
+                    ctx.fillStyle = 'black';
+                    ctx.fillRect((i - 1) * whiteKeyWidth / 2 + whiteKeyWidth - blackKeyWidth / 2, 0, blackKeyWidth, blackKeyHeight);
+                }
+            }
+        });
+    </script>
+
+-07_22_24
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const canvas = document.getElementById('piano');
+            const ctx = canvas.getContext('2d');
+
+            const whiteKeyWidth = 50;
+            const whiteKeyHeight = 200;
+            const blackKeyWidth = 30;
+            const blackKeyHeight = 120;
+
+            const keys = [
+                'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B',
+                'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'
+            ];
+
+            let whiteKeyIndex = 0;
+
+            // Draw white keys
+            for (let i = 0; i < keys.length; i++) {
+                if (!keys[i].includes('#')) {
+                    ctx.fillStyle = 'white';
+                    ctx.fillRect(whiteKeyIndex * whiteKeyWidth, 0, whiteKeyWidth, whiteKeyHeight);
+                    ctx.strokeRect(whiteKeyIndex * whiteKeyWidth, 0, whiteKeyWidth, whiteKeyHeight);
+                    whiteKeyIndex++;
+                }
+            }
+
+            whiteKeyIndex = 0;
+
+            // Draw black keys
+            for (let i = 0; i < keys.length; i++) {
+                if (!keys[i].includes('#')) {
+                    whiteKeyIndex++;
+                } else {
+                    ctx.fillStyle = 'black';
+                    ctx.fillRect(whiteKeyIndex * whiteKeyWidth - blackKeyHeight / 2, 0, blackKeyWidth, blackKeyHeight);
+                }
+            }
+        });
+    </script>

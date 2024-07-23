@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/output.css">
+    <script src="/drawkeyboard.js" defer></script>
+    <title><%= title %></title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        canvas {
+            border: 1px solid #000000;
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <h1><%= title %></h1>
+    <p class="text-3xl font-bold underline">Welcome to the Scale Navigator</p>
+    <div class="text-red-500">Placeholder to test Tailwind CSS</div>
+    <canvas id="piano" width="350" height="100"></canvas>
+    
+</body>
+</html>

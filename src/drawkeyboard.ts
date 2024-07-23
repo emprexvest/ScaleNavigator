@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    // Key width and height logic
+    // Key dimensions
     const whiteKeyWidth = 350 / 14;
     const whiteKeyHeight = 100;
     const blackKeyWidth = whiteKeyWidth * 0.6;
@@ -23,13 +23,16 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     let whiteKeyIndex = 0;
+    const keyElements: {[key: number]: { type: string, x: number, width: number } } = {};
 
     // Draw white keys
     for (let i = 0; i < keys.length; i++) {
+        const x = whiteKeyIndex * whiteKeyWidth;
         if (!keys[i].includes('#')) {
             ctx.fillStyle = 'white';
-            ctx.fillRect(whiteKeyIndex * whiteKeyWidth, 0, whiteKeyWidth, whiteKeyHeight);
-            ctx.strokeRect(whiteKeyIndex * whiteKeyWidth, 0, whiteKeyWidth, whiteKeyHeight);
+            ctx.fillRect(x, 0, whiteKeyWidth, whiteKeyHeight);
+            ctx.strokeRect(x, 0, whiteKeyWidth, whiteKeyHeight);
+            keyElements[i] = { type: 'white', x, width: whiteKeyWidth };
             whiteKeyIndex++;
         }
     }
@@ -41,8 +44,46 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!keys[i].includes('#')) {
             whiteKeyIndex++;
         } else {
+            const x = whiteKeyIndex * whiteKeyWidth - blackKeyWidth / 2;
             ctx.fillStyle = 'black';
-            ctx.fillRect(whiteKeyIndex * whiteKeyWidth - blackKeyHeight / 2, 0, blackKeyWidth, blackKeyHeight);
+            ctx.fillRect(x, 0, blackKeyWidth, blackKeyHeight);
+            keyElements[i] = { type: 'black', x, width: blackKeyWidth };
         }
+    }
+
+    // Add click event listener
+    canvas.addEventListener('click', (event: MouseEvent) => {
+        const rect = canvas.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+
+        for (const [keyIndex, key] of Object.entries(keyElements)) {
+            if (key.type === 'white' && x >= key.x && x <= key.x + key.width && y >= 0 && y <= whiteKeyHeight) {
+                highlightKey(key.x, 0, key.width, whiteKeyHeight, rect.left, rect.top);
+                break;
+            } else if (key.type === 'black' && x >= key.x && x <= key.x + key.width && y >= 0 && y <= blackKeyHeight) {
+                highlightKey(key.x, 0, key.width, blackKeyHeight, rect.left, rect.top);
+                break;
+            }
+        }
+    });
+
+    function highlightKey(x: number, y: number, width: number, height: number, canvasLeft: number, canvasTop: number) {
+        // Create a temporary element to add the animation effect
+        const highlight = document.createElement('div');
+        highlight.style.position = 'absolute';
+        highlight.style.left = `${canvasLeft + x}px`;
+        highlight.style.top = `${canvasTop + y}px`;
+        highlight.style.width = `${width}px`;
+        highlight.style.height = `${height}px`;
+        highlight.style.border = '2px solid red';
+        highlight.className = 'animate-highlight';
+
+        document.body.appendChild(highlight);
+
+        // Remove the element after animation
+        setTimeout(() => {
+            highlight.remove();
+        }, 200);
     }
 });

@@ -103,7 +103,11 @@ Updated src/views/index.ejs added <div class="canvas-container"> to nest <canvas
 Updated src/views/index.ejs <style> .canvas-container { position: relative; },
 Updated src/drawkeyboard.ts function highlightKey(x: number, y: number, width: number, height: number, canvasLeft: number, canvasTop: number) { highlight.style.left = `${canvasLeft + x}px`; highlight.style.top = `${canvasTop + y}px`;,
 
-
+-07_24_24
+Created src/views/dropdownmenu.ejs
+Updated src/views/dropdownmenu.ejs created <div> with nested <label> and <select>, with nested <option>,
+Updated src/views/dropdownmenu.ejs added Tailwind CSS classes for styling the dropdown menus,
+Updated src/views/index.ejs with a <div> and an EJS <%- include(dropdownmenu) %>,
 ---------------------------------------------------------------------
 
 Backup of code

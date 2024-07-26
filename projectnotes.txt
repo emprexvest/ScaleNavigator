@@ -108,6 +108,34 @@ Created src/views/dropdownmenu.ejs
 Updated src/views/dropdownmenu.ejs created <div> with nested <label> and <select>, with nested <option>,
 Updated src/views/dropdownmenu.ejs added Tailwind CSS classes for styling the dropdown menus,
 Updated src/views/index.ejs with a <div> and an EJS <%- include(dropdownmenu) %>,
+
+-07_25_24
+Updated src/drawkeyboard.ts with const noteSelect and const chordTypeSelect,
+Updated src/drawkeyboard.ts if() error handling with (!noteSelect || !chordTypeSelect),
+Updated src/drawkeyboard.ts function highlightKey() argument type asserition (isTemporary: boolean),
+Updated src/drawkeyboard.ts canvas.addEventListener('click') for() nested if() arguments body highlightKey() method with new isTemporary parameter value of true,
+Updated src/drawkeyboard.ts if else logic to nest the setTimeout() method and else, with a nested if(ctx) to change the ctx.fillStyle = 'red';, .fillRect(), strokeRect(),
+Updated src/drawkeyboard.ts function highlightScale(note:string, chordType: string) {} with a error checking for null ctx and canvas elements,
+Updated src/drawkeyboard.ts function highlightScale() ctx.clearRect(),
+Updated src/drawkeyboard.ts function highlightScale() if() to redraw the keyboard,
+Updated src/drawkeyboard.ts function highlightScale() const noteIndices = { 'C': 0, ... },
+Updated src/drawkeyboard.ts function highlightScale() const majorScalePattern = [0, 2, 4, 5, 7, 9, 11],
+Updated src/drawkeyboard.ts function highlightScale() const startIndex = noteIndices[note as keyof typeof noteIndices];,
+Updated src/drawkeyboard.ts majorScalePattern.forEach(interval => { const keyIndex = (startIndex + interval) % 12; const x = keyElements[keyIndex].x; const width = keyElements[keyIndex].width; const height = keyElements[keyIndex].type === 'white' ? whiteKeyHeight : blackKeyHeight;);
+
+-07_26_24
+Updated src/drawkeyboard.ts Added comment // Reset value to 0,
+Updated src/drawkeyboard.ts function highlightKey console.log(`Highlighting key at position (${x}, ${y}), size (${width}x${height}), temporary: ${isTemporary}`);,
+Updated src/drawkeyboard.ts function highlightScale console.log(`Highlighting scale for note: ${note}, chord type: ${chordType}`);,
+Updated src/drawkeyboard.ts function highlightScale  console.log(`Start index for note ${note}: ${startIndex}`);,
+Updated src/drawkeyboard.ts majorScalePattern.forEach() console.log(`Highlighting key index: ${keyIndex}, x: ${x}, width: ${width}, height: ${height}`);,
+Updated src/drawkeyboard.ts majorScalePattern.forEach() noteSelect.addEventListener() { const note = noteSelect.value; const chordType = chordTypeSelect.value; highlightScale(note, chordType);});,
+Updated src/drawkeyboard.ts majorScalePattern.forEach() chordTypeSelect.addEventListener() { const note = noteSelect.value; const chordType = chordTypeSelect.value; highlightScale(note, chordType);});,
+
+
+
+
+
 ---------------------------------------------------------------------
 
 Backup of code

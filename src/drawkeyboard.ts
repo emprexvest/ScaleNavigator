@@ -25,35 +25,70 @@ document.addEventListener('DOMContentLoaded', () => {
         'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'
     ];
 
-    let whiteKeyIndex = 0;
     const keyElements: {[key: number]: { type: string, x: number, width: number } } = {};
 
-    // Draw white keys
-    for (let i = 0; i < keys.length; i++) {
-        const x = whiteKeyIndex * whiteKeyWidth;
-        if (!keys[i].includes('#')) {
-            ctx.fillStyle = 'white';
-            ctx.fillRect(x, 0, whiteKeyWidth, whiteKeyHeight);
-            ctx.strokeRect(x, 0, whiteKeyWidth, whiteKeyHeight);
-            keyElements[i] = { type: 'white', x, width: whiteKeyWidth };
-            whiteKeyIndex++;
+    function drawKeyboard() {
+        let whiteKeyIndex = 0;
+
+            // Draw white keys
+            // Create a Type alias or interface to for type assertions
+        for (let i = 0; i < keys.length; i++) {
+            const x = whiteKeyIndex * whiteKeyWidth;
+            if (!keys[i].includes('#')) {
+                (ctx as CanvasRenderingContext2D).fillStyle = 'white';
+                (ctx as CanvasRenderingContext2D).fillRect(x, 0, whiteKeyWidth, whiteKeyHeight);
+                (ctx as CanvasRenderingContext2D).strokeRect(x, 0, whiteKeyWidth, whiteKeyHeight);
+                keyElements[i] = { type: 'white', x, width: whiteKeyWidth };
+                whiteKeyIndex++;
+            }
+        }
+
+        whiteKeyIndex = 0;
+
+            // Draw black keys
+        for (let i = 0; i < keys.length; i++) {
+            if (!keys[i].includes('#')) {
+                whiteKeyIndex++;
+            } else {
+                const x = whiteKeyIndex * whiteKeyWidth - blackKeyWidth / 2;
+                (ctx as CanvasRenderingContext2D).fillStyle = 'black';
+                (ctx as CanvasRenderingContext2D).fillRect(x, 0, blackKeyWidth, blackKeyHeight);
+                keyElements[i] = { type: 'black', x, width: blackKeyWidth };
+            }
         }
     }
 
-    // Reset value to 0
-    whiteKeyIndex = 0;
+    drawKeyboard();
 
-    // Draw black keys
-    for (let i = 0; i < keys.length; i++) {
-        if (!keys[i].includes('#')) {
-            whiteKeyIndex++;
-        } else {
-            const x = whiteKeyIndex * whiteKeyWidth - blackKeyWidth / 2;
-            ctx.fillStyle = 'black';
-            ctx.fillRect(x, 0, blackKeyWidth, blackKeyHeight);
-            keyElements[i] = { type: 'black', x, width: blackKeyWidth };
-        }
-    }
+    // let whiteKeyIndex = 0;
+    // const keyElements: {[key: number]: { type: string, x: number, width: number } } = {};
+
+    // // Draw white keys
+    // for (let i = 0; i < keys.length; i++) {
+    //     const x = whiteKeyIndex * whiteKeyWidth;
+    //     if (!keys[i].includes('#')) {
+    //         ctx.fillStyle = 'white';
+    //         ctx.fillRect(x, 0, whiteKeyWidth, whiteKeyHeight);
+    //         ctx.strokeRect(x, 0, whiteKeyWidth, whiteKeyHeight);
+    //         keyElements[i] = { type: 'white', x, width: whiteKeyWidth };
+    //         whiteKeyIndex++;
+    //     }
+    // }
+
+    // // Reset value to 0
+    // whiteKeyIndex = 0;
+
+    // // Draw black keys
+    // for (let i = 0; i < keys.length; i++) {
+    //     if (!keys[i].includes('#')) {
+    //         whiteKeyIndex++;
+    //     } else {
+    //         const x = whiteKeyIndex * whiteKeyWidth - blackKeyWidth / 2;
+    //         ctx.fillStyle = 'black';
+    //         ctx.fillRect(x, 0, blackKeyWidth, blackKeyHeight);
+    //         keyElements[i] = { type: 'black', x, width: blackKeyWidth };
+    //     }
+    // }
 
     // Add click event listener
     canvas.addEventListener('click', (event: MouseEvent) => {
@@ -95,9 +130,9 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             // Ensure ctx is not null
             if (ctx) {
-            ctx.fillStyle = 'red';
-            ctx.fillRect(x, 0, width, height);
-            ctx.strokeRect(x, 0, width, height);
+                ctx.fillStyle = 'red';
+                ctx.fillRect(x, 0, width, height);
+                ctx.strokeRect(x, 0, width, height);
             }
         }
     }
@@ -119,19 +154,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Clear previous highlights
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawKeyboard();
 
-        // Redraw the keyboard
-        for (let i = 0; i < keys.length; i++) {
-            const x = keyElements[i].x;
-            if (keyElements[i].type === 'white') {
-                ctx.fillStyle = 'white';
-                ctx.fillRect(x, 0, keyElements[i].width, whiteKeyHeight);
-                ctx.strokeRect(x, 0, keyElements[i].width, whiteKeyHeight);
-            } else {
-                ctx.fillStyle = 'black';
-                ctx.fillRect(x, 0, keyElements[i].width, blackKeyHeight);
-            }
-        }
+        // // Redraw the keyboard
+        // for (let i = 0; i < keys.length; i++) {
+        //     const x = keyElements[i].x;
+        //     if (keyElements[i].type === 'white') {
+        //         ctx.fillStyle = 'white';
+        //         ctx.fillRect(x, 0, keyElements[i].width, whiteKeyHeight);
+        //         ctx.strokeRect(x, 0, keyElements[i].width, whiteKeyHeight);
+        //     } else {
+        //         ctx.fillStyle = 'black';
+        //         ctx.fillRect(x, 0, keyElements[i].width, blackKeyHeight);
+        //     }
+        // }
 
         const noteIndices = {
             'C': 0, 'C#': 1, 'D': 2, 'D#': 3, 'E': 4, 'F': 5, 'F#': 6,
@@ -142,20 +178,39 @@ document.addEventListener('DOMContentLoaded', () => {
         const startIndex = noteIndices[note as keyof typeof noteIndices];
         console.log(`Start index for note ${note}: ${startIndex}`);
 
-        // Highlight the scale
+
+
         majorScalePattern.forEach(interval => {
             const keyIndex = (startIndex + interval) % 12;
-            const x = keyElements[keyIndex].x;
-            const width = keyElements[keyIndex].width;
-            const height = keyElements[keyIndex].type === 'white' ? whiteKeyHeight : blackKeyHeight;
+            const octave = Math.floor((startIndex + interval) / 12);
+            const actualKeyIndex = keyIndex + octave * 12;
 
-            console.log(`Highlighting key index: ${keyIndex}, x: ${x}, width: ${width}, height: ${height}`);
+            const key = keyElements[actualKeyIndex];
+            if (key) {
+                const x = key.x;
+                const width = key.width;
+                const height = key.type === 'white' ? whiteKeyHeight : blackKeyHeight;
 
-        // Highlight using the highlightKey function without the temporary effect
-        highlightKey(x, 0,width, height, canvas.getBoundingClientRect().left, canvas.getBoundingClientRect().top, false);
-
+                console.log(`Highlighting key index: ${keyIndex}, x: ${x}, width: ${width}, height: ${height}`);
+                highlightKey(x, 0,width, height, canvas.getBoundingClientRect().left, canvas.getBoundingClientRect().top, false)
+            }
         });
+
     }
+    //     // Highlight the scale
+    //     majorScalePattern.forEach(interval => {
+    //         const keyIndex = (startIndex + interval) % 12;
+    //         const x = keyElements[keyIndex].x;
+    //         const width = keyElements[keyIndex].width;
+    //         const height = keyElements[keyIndex].type === 'white' ? whiteKeyHeight : blackKeyHeight;
+
+    //         console.log(`Highlighting key index: ${keyIndex}, x: ${x}, width: ${width}, height: ${height}`);
+
+    //     // Highlight using the highlightKey function without the temporary effect
+    //     highlightKey(x, 0,width, height, canvas.getBoundingClientRect().left, canvas.getBoundingClientRect().top, false);
+
+    //     });
+    // }
 
     // Add event listeners to dropdowns
     noteSelect.addEventListener('change', () => {

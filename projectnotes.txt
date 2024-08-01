@@ -132,7 +132,15 @@ Updated src/drawkeyboard.ts majorScalePattern.forEach() console.log(`Highlightin
 Updated src/drawkeyboard.ts majorScalePattern.forEach() noteSelect.addEventListener() { const note = noteSelect.value; const chordType = chordTypeSelect.value; highlightScale(note, chordType);});,
 Updated src/drawkeyboard.ts majorScalePattern.forEach() chordTypeSelect.addEventListener() { const note = noteSelect.value; const chordType = chordTypeSelect.value; highlightScale(note, chordType);});,
 
-
+-08_01_24
+Commented commented out src/drawkeyboad.ts draw white key and draw black key for loops,
+Updated src/drawkeyboard.ts refactored the draw white key and draw black key into function drawKeyboard ();
+Updated src/drawkeyboard.ts added drawKeyboard() method call,
+Updated src/drawkeyboard.ts added drawKeyboard() method call to the highlightScale() fuction body,
+Commented commented out src/drawkeyboard.ts redraw keyboard for () loop for the keyboard from the highlightScale() {} body,
+Commented commented out src/drawkeyboard.ts highlight scale majorScalePattern.forEach(),
+Updated src/drawkeyboard.ts majorScalePattern.forEach(interval => { const keyIndex..},
+Updated src/drawkeyboard.ts added type assertion to drawKeyboard() fuction (ctx as CanvasRenderingContext2D)...,
 
 
 
@@ -217,3 +225,34 @@ Backup of code
             }
         });
     </script>
+
+-08_01_24
+let whiteKeyIndex = 0;
+    const keyElements: {[key: number]: { type: string, x: number, width: number } } = {};
+
+    // Draw white keys
+    for (let i = 0; i < keys.length; i++) {
+        const x = whiteKeyIndex * whiteKeyWidth;
+        if (!keys[i].includes('#')) {
+            ctx.fillStyle = 'white';
+            ctx.fillRect(x, 0, whiteKeyWidth, whiteKeyHeight);
+            ctx.strokeRect(x, 0, whiteKeyWidth, whiteKeyHeight);
+            keyElements[i] = { type: 'white', x, width: whiteKeyWidth };
+            whiteKeyIndex++;
+        }
+    }
+
+    // Reset value to 0
+    whiteKeyIndex = 0;
+
+    // Draw black keys
+    for (let i = 0; i < keys.length; i++) {
+        if (!keys[i].includes('#')) {
+            whiteKeyIndex++;
+        } else {
+            const x = whiteKeyIndex * whiteKeyWidth - blackKeyWidth / 2;
+            ctx.fillStyle = 'black';
+            ctx.fillRect(x, 0, blackKeyWidth, blackKeyHeight);
+            keyElements[i] = { type: 'black', x, width: blackKeyWidth };
+        }
+    }

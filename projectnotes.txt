@@ -151,7 +151,29 @@ Updated src/drawkeyboard.ts added const numberOfWhiteKeys = keys.filter(key => !
 Updated src/drawkeyboard.ts updated const whiteKeyWidth = availableWidth / numberOfWhiteKeys;,
 Updated src/drawkeyboard.ts updated const whiteKeyHeight = availableHeight;,
 
+-08_06_24
+Updated src/drawkeyboard.ts updated highlightKey() { highlight.style.zIndex = '1'; if (height === b;ackKeyHeight) {highlight.style.zIndex = '2';}},
+Updated src/drawkeyboard.ts updated highlightKey(..., keyType: string) { highlight.style.zIndex = keyType === 'black' ? '2' : '1';},
+Updated src/drawkeyboard.ts updated marjorScalePattern.forEach() {..., highlightKey(x, 0, width, height, canvas.getBoundingClientRect().left, canvas.getBoundingClientRect().top, false, key.type);},
 
+-08_15_24
+Updated src/drawkeyboard.ts updated function highlightKey() {};,
+Ran npm run build,
+Updated src/drawkeyboard.ts with if (noteSelect && chordTypeSelect) {},
+
+-08_20_24
+Updated src/drawkeyboard.ts highlightKey() { const startColor = 'rgba(255, 0, 0, 1); ...},
+Commented src/drawkeyboard.ts commented out // Add highlight to the key ctx.fillStyle = 'red'; ...,
+Updated src/drawkeyboard.ts highlightKey() {// Redraw black keys on top if necessary  const blackKeyX = whiteKeyIndex * whiteKeyWidth - blackKeyWidth / 2;},
+Updated src/drawkeyboard.ts hightlightKey() { currentStep++ if (currentStep <= steps { requestAnimationFrame(animate);})},
+
+-08_21_24
+Updated src/drawkeyboard.ts highlightKey() { const startColor = { r: 255, b: 0, g: 0, a: 1 };, const endColor = { r: 255, b: 0, g: 0, a: 0 };},
+Updated src/drawkeyboard.ts highlightKey() { const currentColor = r: Math.round(startColor.r + progress * (endColor.r - startColor.r)), ... },
+
+-08_23_24
+Commented src/drawkeyboard.ts commented out highlightKey(x, 0,width, height, canvas.getBoundingClientRect().left, canvas.getBoundingClientRect().top, false, key.type) },
+Updated src/drawkeyboard.ts // Highlight key without redrawing the keyboard ctx.fillStyle = 'red'; ...,
 
 ---------------------------------------------------------------------
 
@@ -330,3 +352,42 @@ let whiteKeyIndex = 0;
 
     //     });
     // }
+
+    -08_15_24
+    // Create a temporary element to add the animation effect
+        const highlight = document.createElement('div');
+        highlight.style.position = 'absolute';
+        highlight.style.left = `${canvasLeft + x}px`;
+        highlight.style.top = `${canvasTop + y}px`;
+        highlight.style.width = `${width}px`;
+        highlight.style.height = `${height}px`;
+        highlight.style.border = '2px solid red';
+        highlight.className = 'animate-highlight';
+
+        // // Adjust z-index based on the key type
+        // highlight.style.zIndex = '1';
+        // if (height === blackKeyHeight) {
+        //     highlight.style.zIndex = '2';
+        // }
+
+        // Adjust z-index based on the key type
+        highlight.style.zIndex = keyType === 'black' ? '2' : '1';
+
+
+
+        document.body.appendChild(highlight);
+
+        // Remove the element after animation if it's temporary
+        if (isTemporary) {
+            setTimeout(() => {
+                highlight.remove();
+            }, 200);
+        } else {
+            // Ensure ctx is not null
+            if (ctx) {
+                ctx.fillStyle = 'red';
+                ctx.fillRect(x, 0, width, height);
+                ctx.strokeRect(x, 0, width, height);
+            }
+        }
+    }

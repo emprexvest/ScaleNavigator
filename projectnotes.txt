@@ -108,6 +108,73 @@ Created src/views/dropdownmenu.ejs
 Updated src/views/dropdownmenu.ejs created <div> with nested <label> and <select>, with nested <option>,
 Updated src/views/dropdownmenu.ejs added Tailwind CSS classes for styling the dropdown menus,
 Updated src/views/index.ejs with a <div> and an EJS <%- include(dropdownmenu) %>,
+
+-07_25_24
+Updated src/drawkeyboard.ts with const noteSelect and const chordTypeSelect,
+Updated src/drawkeyboard.ts if() error handling with (!noteSelect || !chordTypeSelect),
+Updated src/drawkeyboard.ts function highlightKey() argument type asserition (isTemporary: boolean),
+Updated src/drawkeyboard.ts canvas.addEventListener('click') for() nested if() arguments body highlightKey() method with new isTemporary parameter value of true,
+Updated src/drawkeyboard.ts if else logic to nest the setTimeout() method and else, with a nested if(ctx) to change the ctx.fillStyle = 'red';, .fillRect(), strokeRect(),
+Updated src/drawkeyboard.ts function highlightScale(note:string, chordType: string) {} with a error checking for null ctx and canvas elements,
+Updated src/drawkeyboard.ts function highlightScale() ctx.clearRect(),
+Updated src/drawkeyboard.ts function highlightScale() if() to redraw the keyboard,
+Updated src/drawkeyboard.ts function highlightScale() const noteIndices = { 'C': 0, ... },
+Updated src/drawkeyboard.ts function highlightScale() const majorScalePattern = [0, 2, 4, 5, 7, 9, 11],
+Updated src/drawkeyboard.ts function highlightScale() const startIndex = noteIndices[note as keyof typeof noteIndices];,
+Updated src/drawkeyboard.ts majorScalePattern.forEach(interval => { const keyIndex = (startIndex + interval) % 12; const x = keyElements[keyIndex].x; const width = keyElements[keyIndex].width; const height = keyElements[keyIndex].type === 'white' ? whiteKeyHeight : blackKeyHeight;);
+
+-07_26_24
+Updated src/drawkeyboard.ts Added comment // Reset value to 0,
+Updated src/drawkeyboard.ts function highlightKey console.log(`Highlighting key at position (${x}, ${y}), size (${width}x${height}), temporary: ${isTemporary}`);,
+Updated src/drawkeyboard.ts function highlightScale console.log(`Highlighting scale for note: ${note}, chord type: ${chordType}`);,
+Updated src/drawkeyboard.ts function highlightScale  console.log(`Start index for note ${note}: ${startIndex}`);,
+Updated src/drawkeyboard.ts majorScalePattern.forEach() console.log(`Highlighting key index: ${keyIndex}, x: ${x}, width: ${width}, height: ${height}`);,
+Updated src/drawkeyboard.ts majorScalePattern.forEach() noteSelect.addEventListener() { const note = noteSelect.value; const chordType = chordTypeSelect.value; highlightScale(note, chordType);});,
+Updated src/drawkeyboard.ts majorScalePattern.forEach() chordTypeSelect.addEventListener() { const note = noteSelect.value; const chordType = chordTypeSelect.value; highlightScale(note, chordType);});,
+
+-08_01_24
+Commented commented out src/drawkeyboad.ts draw white key and draw black key for loops,
+Updated src/drawkeyboard.ts refactored the draw white key and draw black key into function drawKeyboard ();
+Updated src/drawkeyboard.ts added drawKeyboard() method call,
+Updated src/drawkeyboard.ts added drawKeyboard() method call to the highlightScale() fuction body,
+Commented commented out src/drawkeyboard.ts redraw keyboard for () loop for the keyboard from the highlightScale() {} body,
+Commented commented out src/drawkeyboard.ts highlight scale majorScalePattern.forEach(),
+Updated src/drawkeyboard.ts majorScalePattern.forEach(interval => { const keyIndex..},
+Updated src/drawkeyboard.ts added type assertion to drawKeyboard() fuction (ctx as CanvasRenderingContext2D)...,
+
+-08_05_24
+Updated src/drawkeyboard.ts updated const whiteKeyWidth = (350 / 14) * 2; and const whiteKeyHeight = 100 * 2;,
+Updated src/drawkeyboard.ts added set canvas dimensions canvas.width = whiteKeyWidth * (keys.length / 2); canvas.height = whiteKeyHeight;,
+Updated src/drawkeyboard.ts added const margin = 0.1; const availableWidth = window.innerWidth * (1 - 2 * margin); const availableHeight = window.innerHeight * (1 - 2 * margin);,
+Updated src/drawkeyboard.ts added canvas.width = availableWidth; canvas.height = availableHeight;,
+Updated src/drawkeyboard.ts added const numberOfWhiteKeys = keys.filter(key => !key.includes('#')).length;,
+Updated src/drawkeyboard.ts updated const whiteKeyWidth = availableWidth / numberOfWhiteKeys;,
+Updated src/drawkeyboard.ts updated const whiteKeyHeight = availableHeight;,
+
+-08_06_24
+Updated src/drawkeyboard.ts updated highlightKey() { highlight.style.zIndex = '1'; if (height === b;ackKeyHeight) {highlight.style.zIndex = '2';}},
+Updated src/drawkeyboard.ts updated highlightKey(..., keyType: string) { highlight.style.zIndex = keyType === 'black' ? '2' : '1';},
+Updated src/drawkeyboard.ts updated marjorScalePattern.forEach() {..., highlightKey(x, 0, width, height, canvas.getBoundingClientRect().left, canvas.getBoundingClientRect().top, false, key.type);},
+
+-08_15_24
+Updated src/drawkeyboard.ts updated function highlightKey() {};,
+Ran npm run build,
+Updated src/drawkeyboard.ts with if (noteSelect && chordTypeSelect) {},
+
+-08_20_24
+Updated src/drawkeyboard.ts highlightKey() { const startColor = 'rgba(255, 0, 0, 1); ...},
+Commented src/drawkeyboard.ts commented out // Add highlight to the key ctx.fillStyle = 'red'; ...,
+Updated src/drawkeyboard.ts highlightKey() {// Redraw black keys on top if necessary  const blackKeyX = whiteKeyIndex * whiteKeyWidth - blackKeyWidth / 2;},
+Updated src/drawkeyboard.ts hightlightKey() { currentStep++ if (currentStep <= steps { requestAnimationFrame(animate);})},
+
+-08_21_24
+Updated src/drawkeyboard.ts highlightKey() { const startColor = { r: 255, b: 0, g: 0, a: 1 };, const endColor = { r: 255, b: 0, g: 0, a: 0 };},
+Updated src/drawkeyboard.ts highlightKey() { const currentColor = r: Math.round(startColor.r + progress * (endColor.r - startColor.r)), ... },
+
+-08_23_24
+Commented src/drawkeyboard.ts commented out highlightKey(x, 0,width, height, canvas.getBoundingClientRect().left, canvas.getBoundingClientRect().top, false, key.type) },
+Updated src/drawkeyboard.ts // Highlight key without redrawing the keyboard ctx.fillStyle = 'red'; ...,
+
 ---------------------------------------------------------------------
 
 Backup of code
@@ -189,3 +256,138 @@ Backup of code
             }
         });
     </script>
+
+-08_01_24
+let whiteKeyIndex = 0;
+    const keyElements: {[key: number]: { type: string, x: number, width: number } } = {};
+
+    // Draw white keys
+    for (let i = 0; i < keys.length; i++) {
+        const x = whiteKeyIndex * whiteKeyWidth;
+        if (!keys[i].includes('#')) {
+            ctx.fillStyle = 'white';
+            ctx.fillRect(x, 0, whiteKeyWidth, whiteKeyHeight);
+            ctx.strokeRect(x, 0, whiteKeyWidth, whiteKeyHeight);
+            keyElements[i] = { type: 'white', x, width: whiteKeyWidth };
+            whiteKeyIndex++;
+        }
+    }
+
+    // Reset value to 0
+    whiteKeyIndex = 0;
+
+    // Draw black keys
+    for (let i = 0; i < keys.length; i++) {
+        if (!keys[i].includes('#')) {
+            whiteKeyIndex++;
+        } else {
+            const x = whiteKeyIndex * whiteKeyWidth - blackKeyWidth / 2;
+            ctx.fillStyle = 'black';
+            ctx.fillRect(x, 0, blackKeyWidth, blackKeyHeight);
+            keyElements[i] = { type: 'black', x, width: blackKeyWidth };
+        }
+    }
+
+
+    -08_05_24
+        // Set canvas dimensions
+    canvas.width = whiteKeyHeight * (keys.length / 2);
+    canvas.height = whiteKeyHeight;
+
+
+    // let whiteKeyIndex = 0;
+    // const keyElements: {[key: number]: { type: string, x: number, width: number } } = {};
+
+    // // Draw white keys
+    // for (let i = 0; i < keys.length; i++) {
+    //     const x = whiteKeyIndex * whiteKeyWidth;
+    //     if (!keys[i].includes('#')) {
+    //         ctx.fillStyle = 'white';
+    //         ctx.fillRect(x, 0, whiteKeyWidth, whiteKeyHeight);
+    //         ctx.strokeRect(x, 0, whiteKeyWidth, whiteKeyHeight);
+    //         keyElements[i] = { type: 'white', x, width: whiteKeyWidth };
+    //         whiteKeyIndex++;
+    //     }
+    // }
+
+    // // Reset value to 0
+    // whiteKeyIndex = 0;
+
+    // // Draw black keys
+    // for (let i = 0; i < keys.length; i++) {
+    //     if (!keys[i].includes('#')) {
+    //         whiteKeyIndex++;
+    //     } else {
+    //         const x = whiteKeyIndex * whiteKeyWidth - blackKeyWidth / 2;
+    //         ctx.fillStyle = 'black';
+    //         ctx.fillRect(x, 0, blackKeyWidth, blackKeyHeight);
+    //         keyElements[i] = { type: 'black', x, width: blackKeyWidth };
+    //     }
+    // }
+
+            // // Redraw the keyboard
+        // for (let i = 0; i < keys.length; i++) {
+        //     const x = keyElements[i].x;
+        //     if (keyElements[i].type === 'white') {
+        //         ctx.fillStyle = 'white';
+        //         ctx.fillRect(x, 0, keyElements[i].width, whiteKeyHeight);
+        //         ctx.strokeRect(x, 0, keyElements[i].width, whiteKeyHeight);
+        //     } else {
+        //         ctx.fillStyle = 'black';
+        //         ctx.fillRect(x, 0, keyElements[i].width, blackKeyHeight);
+        //     }
+        // }
+
+            //     // Highlight the scale
+    //     majorScalePattern.forEach(interval => {
+    //         const keyIndex = (startIndex + interval) % 12;
+    //         const x = keyElements[keyIndex].x;
+    //         const width = keyElements[keyIndex].width;
+    //         const height = keyElements[keyIndex].type === 'white' ? whiteKeyHeight : blackKeyHeight;
+
+    //         console.log(`Highlighting key index: ${keyIndex}, x: ${x}, width: ${width}, height: ${height}`);
+
+    //     // Highlight using the highlightKey function without the temporary effect
+    //     highlightKey(x, 0,width, height, canvas.getBoundingClientRect().left, canvas.getBoundingClientRect().top, false);
+
+    //     });
+    // }
+
+    -08_15_24
+    // Create a temporary element to add the animation effect
+        const highlight = document.createElement('div');
+        highlight.style.position = 'absolute';
+        highlight.style.left = `${canvasLeft + x}px`;
+        highlight.style.top = `${canvasTop + y}px`;
+        highlight.style.width = `${width}px`;
+        highlight.style.height = `${height}px`;
+        highlight.style.border = '2px solid red';
+        highlight.className = 'animate-highlight';
+
+        // // Adjust z-index based on the key type
+        // highlight.style.zIndex = '1';
+        // if (height === blackKeyHeight) {
+        //     highlight.style.zIndex = '2';
+        // }
+
+        // Adjust z-index based on the key type
+        highlight.style.zIndex = keyType === 'black' ? '2' : '1';
+
+
+
+        document.body.appendChild(highlight);
+
+        // Remove the element after animation if it's temporary
+        if (isTemporary) {
+            setTimeout(() => {
+                highlight.remove();
+            }, 200);
+        } else {
+            // Ensure ctx is not null
+            if (ctx) {
+                ctx.fillStyle = 'red';
+                ctx.fillRect(x, 0, width, height);
+                ctx.strokeRect(x, 0, width, height);
+            }
+        }
+    }

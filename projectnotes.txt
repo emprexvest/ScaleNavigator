@@ -175,6 +175,48 @@ Updated src/drawkeyboard.ts highlightKey() { const currentColor = r: Math.round(
 Commented src/drawkeyboard.ts commented out highlightKey(x, 0,width, height, canvas.getBoundingClientRect().left, canvas.getBoundingClientRect().top, false, key.type) },
 Updated src/drawkeyboard.ts // Highlight key without redrawing the keyboard ctx.fillStyle = 'red'; ...,
 
+-08_27_24
+Commented src/drawkeyboard.ts commented out  // ctx.fillRect(x , y, width, height);,
+Updated src/drawkeyboard.ts highlightKey() {... ctx.lineWidth = 3;},
+Commented src/drawkeyboard.ts commented out // ctx.fillRect(x, 0, width, height);,
+Updated src/drawkeyboard.ts majorScalePattern.forEach(... ctx.lineWidth = 3;)
+
+-08_28_24
+
+-08_29_24
+Commented src/drawkeyboard.ts commented out //currentStep++ if (currentStep <= steps) {...};,
+Updated src/drawkeyboard.ts highlightKey() { currentStep++ if (if (currentStep <= steps) {requestAnimationFrame(animate)})},
+Commented src/drawkeyboard.ts commented out // Redraw black keys on top if necessary,
+Updated src/drawkeyboard.ts highlightKey() // Draw black keys on top after highlighting if (keyType === 'white') {...},
+Commented src/drawkeyboard.ts // animate();
+Updated src/drawkeyboard.ts highlightKey() { animate() },
+Updated src/drawkeyboard.ts majorScalePattern.forEach() { if (key.type === 'white') {...},
+Commented src/drawkeyboard.ts // Add event listeners to dropdowns if (noteSelect && chordTypeSelect) {},
+Updated src/drawkeyboard.ts  // Add event listeners noteSelect.addEventListener('change', () => {}),
+Commented src/drawkeyboard.ts // ctx.lineWidth = 3; // ctx.strokeRect(x, y, width, height);,
+Commented src/drawkeyboard.ts // hightlightKey () {if(keyType === 'white') {},
+
+-08_30_24
+Updated src/drawkeyboard.ts function drawBlackKeysOnTop() {...},
+Commented src/drawkeyboard.ts majorScalePattern.forEach(interval) { // ctx.strokeRect(x, 0, width, height); },
+Commented src/drawkeyboard.ts majorScalePattern.forEach(interval) {// if (key.type === 'white') {...},
+Updated src/drawkeyboard.ts majorScalePattern.forEach(interval) { drawBlackKeysOnTop();},
+
+-09_04_24
+Updated src/drawkeyboard.ts const steps = 40;,
+
+-09_05_24
+Updated src/drawkeyboard.ts highlightScale() { if (key.type === 'black') { ctx.fillStyle = 'black'; ctx.fillRect(x, 0, blackKeyWidth, blackKeyHeight)}};,
+Updated src/drawkeyboard.ts highlightScale() { const highlightedKeys = [];},
+Commented src/drawkeyboard.ts highlightScale() {   // // If it's a black key, draw it again on top to maintain correct layering},
+Updated src/drawkeyboard.ts hightlightScale() {..., const highlightedKeys: {x: number; width: number; height: number; type: string;}[] = [];},
+Updated src/drawkeyboard.ts if () { highlightedKeys.push({ x, width, height, type: key.type  });},
+Updated src/drawkeyboard.ts if (key.type === 'white') {...},
+Updated src/drawkeyboard.ts  // Now highlight black keys after they've been drawn,
+
+
+
+
 ---------------------------------------------------------------------
 
 Backup of code
@@ -391,3 +433,138 @@ let whiteKeyIndex = 0;
             }
         }
     }
+
+09_05_24
+// // Draw black keys on top after highlighting
+            // if (keyType === 'white') {
+            //     let whiteKeyIndex = 0;
+            //     for (let i = 0; i< keys.length; i++) {
+            //         if (keys[i].includes('#')) {
+            //             const blackKeyX = whiteKeyIndex * whiteKeyWidth - blackKeyWidth / 2;
+            //             ctx.fillStyle = 'black';
+            //             ctx.fillRect(blackKeyX, 0, blackKeyWidth, blackKeyHeight);
+            //         } else {
+            //             whiteKeyIndex++;
+            //         }
+            //     }
+            // }
+
+            // // Redraw black keys on top if necessary
+            // let whiteKeyIndex = 0;
+            // for (let i = 0; i < keys.length; i++) {
+            //     if (!keys[i].includes('#')) {
+            //         whiteKeyIndex++;
+            //     } else {
+            //         const blackKeyX = whiteKeyIndex * whiteKeyWidth - blackKeyWidth / 2;
+            //         ctx.fillStyle = 'black';
+            //         ctx.fillRect(blackKeyX, 0, blackKeyWidth, blackKeyHeight);
+            //     }
+            // }
+
+            // currentStep++;
+            // if (currentStep <= steps) {
+            //     requestAnimationFrame(animate);
+            // }
+
+           
+            // animate();
+
+                        // ctx.lineWidth = 3;
+            // ctx.strokeRect(x, y, width, height);
+
+
+                    // // Add highlight to the key
+        // ctx.fillStyle = 'red';
+        // ctx.fillRect(x, y, width, height);
+        // ctx.strokeRect(x, y, width, height);
+
+
+        
+
+        // // Remove temporary hightlight
+        // if (isTemporary) {
+        //     setTimeout(() => {
+        //         drawKeyboard();
+        //     }, 200);
+        // }
+
+
+            //     // Create a temporary element to add the animation effect
+    //     const highlight = document.createElement('div');
+    //     highlight.style.position = 'absolute';
+    //     highlight.style.left = `${canvasLeft + x}px`;
+    //     highlight.style.top = `${canvasTop + y}px`;
+    //     highlight.style.width = `${width}px`;
+    //     highlight.style.height = `${height}px`;
+    //     highlight.style.border = '2px solid red';
+    //     highlight.className = 'animate-highlight';
+
+    //     // // Adjust z-index based on the key type
+    //     // highlight.style.zIndex = '1';
+    //     // if (height === blackKeyHeight) {
+    //     //     highlight.style.zIndex = '2';
+    //     // }
+
+    //     // Adjust z-index based on the key type
+    //     highlight.style.zIndex = keyType === 'black' ? '2' : '1';
+
+
+
+    //     document.body.appendChild(highlight);
+
+    //     // Remove the element after animation if it's temporary
+    //     if (isTemporary) {
+    //         setTimeout(() => {
+    //             highlight.remove();
+    //         }, 200);
+    //     } else {
+    //         // Ensure ctx is not null
+    //         if (ctx) {
+    //             ctx.fillStyle = 'red';
+    //             ctx.fillRect(x, 0, width, height);
+    //             ctx.strokeRect(x, 0, width, height);
+    //         }
+    //     }
+    // }
+
+            // ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+
+                // highlightKey(x, 0,width, height, canvas.getBoundingClientRect().left, canvas.getBoundingClientRect().top, false, key.type)
+
+               // ctx.lineWidth = 3;
+                // ctx.strokeRect(x, 0, width, height);
+
+                // if (key.type === 'white') {
+                //     let whiteKeyIndex = 0;
+                //     for (let i = 0; i < keys.length; i++) {
+                //         if (keys[i].includes('#')) {
+                //             const blackKeyX = whiteKeyIndex * whiteKeyWidth - blackKeyWidth / 2;
+                //             ctx.fillStyle = 'black';
+                //             ctx.fillRect(blackKeyX, 0, blackKeyWidth, blackKeyHeight);
+                //         } else {
+                //             whiteKeyIndex++;
+                //         }
+                //     }
+                // }
+
+    // // Add event listeners to dropdowns
+    // if (noteSelect && chordTypeSelect) {
+    //     noteSelect.addEventListener('change', () => {
+    //         const note = noteSelect.value;
+    //         const chordType = chordTypeSelect.value;
+    //         highlightScale(note, chordType);
+    //     });
+
+    //     chordTypeSelect.addEventListener('change', () => {
+    //         const note = noteSelect.value;
+    //         const chordType = chordTypeSelect.value;
+    //         highlightScale(note, chordType);
+    //     });
+    // }
+
+                    // // If it's a black key, draw it again on top to maintain correct layering
+                // if (key.type === 'black') {
+                //     ctx.fillStyle = 'black';
+                //     ctx.fillRect(x, 0, blackKeyWidth, blackKeyHeight);
+                // }

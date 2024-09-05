@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const startColor = { r: 255, b: 0, g: 0, a: 1 }; // Red with full opacity
         const endColor = { r: 255, b: 0, g: 0, a: 0 }; // Red with zero opacity
         const duration = 200; // Duration of the effect in milliseconds
-        const steps = 20; // Number of steps for the fading effect
+        const steps = 40; // Number of steps for the fading effect
         const interval = duration / steps;
         // Return if ctx is not null
         if (!ctx)
@@ -106,67 +106,27 @@ document.addEventListener('DOMContentLoaded', () => {
             // Add hightlight to the key
             ctx.fillStyle = colorString;
             ctx.fillRect(x, y, width, height);
-            ctx.strokeRect(x, y, width, height);
-            // Redraw black keys on top if necessary
-            let whiteKeyIndex = 0;
-            for (let i = 0; i < keys.length; i++) {
-                if (!keys[i].includes('#')) {
-                    whiteKeyIndex++;
-                }
-                else {
-                    const blackKeyX = whiteKeyIndex * whiteKeyWidth - blackKeyWidth / 2;
-                    ctx.fillStyle = 'black';
-                    ctx.fillRect(blackKeyX, 0, blackKeyWidth, blackKeyHeight);
-                }
-            }
             currentStep++;
             if (currentStep <= steps) {
                 requestAnimationFrame(animate);
             }
         };
         animate();
-        // // Add highlight to the key
-        // ctx.fillStyle = 'red';
-        // ctx.fillRect(x, y, width, height);
-        // ctx.strokeRect(x, y, width, height);
-        // // Remove temporary hightlight
-        // if (isTemporary) {
-        //     setTimeout(() => {
-        //         drawKeyboard();
-        //     }, 200);
-        // }
     }
-    //     // Create a temporary element to add the animation effect
-    //     const highlight = document.createElement('div');
-    //     highlight.style.position = 'absolute';
-    //     highlight.style.left = `${canvasLeft + x}px`;
-    //     highlight.style.top = `${canvasTop + y}px`;
-    //     highlight.style.width = `${width}px`;
-    //     highlight.style.height = `${height}px`;
-    //     highlight.style.border = '2px solid red';
-    //     highlight.className = 'animate-highlight';
-    //     // // Adjust z-index based on the key type
-    //     // highlight.style.zIndex = '1';
-    //     // if (height === blackKeyHeight) {
-    //     //     highlight.style.zIndex = '2';
-    //     // }
-    //     // Adjust z-index based on the key type
-    //     highlight.style.zIndex = keyType === 'black' ? '2' : '1';
-    //     document.body.appendChild(highlight);
-    //     // Remove the element after animation if it's temporary
-    //     if (isTemporary) {
-    //         setTimeout(() => {
-    //             highlight.remove();
-    //         }, 200);
-    //     } else {
-    //         // Ensure ctx is not null
-    //         if (ctx) {
-    //             ctx.fillStyle = 'red';
-    //             ctx.fillRect(x, 0, width, height);
-    //             ctx.strokeRect(x, 0, width, height);
-    //         }
-    //     }
-    // }
+    // Draw black keys on top to ensure proper layering
+    function drawBlackKeysOnTop() {
+        let whiteKeyIndex = 0;
+        for (let i = 0; i < keys.length; i++) {
+            if (keys[i].includes('#')) {
+                const blackKeyX = whiteKeyIndex * whiteKeyWidth - blackKeyWidth / 2;
+                ctx.fillStyle = 'black';
+                ctx.fillRect(blackKeyX, 0, blackKeyWidth, blackKeyHeight);
+            }
+            else {
+                whiteKeyIndex++;
+            }
+        }
+    }
     // Function to highlight keys based on selected note and chord type
     function highlightScale(note, chordType) {
         console.log(`Highlighting scale for note: ${note}, chord type: ${chordType}`);
@@ -181,7 +141,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         // // Clear previous highlights
-        // ctx.clearRect(0, 0, canvas.width, canvas.height);
         drawKeyboard();
         const noteIndices = {
             'C': 0, 'C#': 1, 'D': 2, 'D#': 3, 'E': 4, 'F': 5, 'F#': 6,
@@ -190,6 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const majorScalePattern = [0, 2, 4, 5, 7, 9, 11];
         const startIndex = noteIndices[note];
         console.log(`Start index for note ${note}: ${startIndex}`);
+        const highlightedKeys = [];
         majorScalePattern.forEach(interval => {
             // Calculate the key index for the note within the chromatic scale
             const keyIndex = (startIndex + interval) % 12;
@@ -202,37 +162,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 const x = key.x;
                 const width = key.width;
                 const height = key.type === 'white' ? whiteKeyHeight : blackKeyHeight;
+                highlightedKeys.push({ x, width, height, type: key.type });
                 console.log(`Highlighting key index: ${keyIndex}, x: ${x}, width: ${width}, height: ${height}`);
-                // highlightKey(x, 0,width, height, canvas.getBoundingClientRect().left, canvas.getBoundingClientRect().top, false, key.type)
                 // Highlight key without redrawing the keyboard
-                ctx.fillStyle = 'red';
+                if (key.type === 'white') {
+                    ctx.fillStyle = 'red';
+                    ctx.fillRect(x, 0, width, height);
+                }
+            }
+        });
+        // Redraw black keys on top after highlighting scale
+        drawBlackKeysOnTop();
+        // Now highlight black keys after they've been drawn
+        highlightedKeys.forEach(({ x, width, height, type }) => {
+            if (type === 'black') {
+                ctx.fillStyle = 'rgba(255, 0, 0, 0.5)';
                 ctx.fillRect(x, 0, width, height);
-                ctx.strokeRect(x, 0, width, height);
             }
         });
     }
     // Add event listeners to dropdowns
-    if (noteSelect && chordTypeSelect) {
-        noteSelect.addEventListener('change', () => {
-            const note = noteSelect.value;
-            const chordType = chordTypeSelect.value;
-            highlightScale(note, chordType);
-        });
-        chordTypeSelect.addEventListener('change', () => {
-            const note = noteSelect.value;
-            const chordType = chordTypeSelect.value;
-            highlightScale(note, chordType);
-        });
-    }
-    // // Add event listeners to dropdowns
-    // noteSelect.addEventListener('change', () => {
-    //     const note = noteSelect.value;
-    //     const chordType = chordTypeSelect.value;
-    //     highlightScale(note, chordType);
-    // });
-    // chordTypeSelect.addEventListener('change', () => {
-    //     const note = noteSelect.value;
-    //     const chordType = chordTypeSelect.value;
-    //     highlightScale(note, chordType);
-    // });
+    noteSelect.addEventListener('change', () => {
+        const note = noteSelect.value;
+        const chordType = chordTypeSelect.value;
+        highlightScale(note, chordType);
+    });
+    chordTypeSelect.addEventListener('change', () => {
+        const note = noteSelect.value;
+        const chordType = chordTypeSelect.value;
+        highlightScale(note, chordType);
+    });
 });

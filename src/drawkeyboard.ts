@@ -45,8 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function drawKeyboard() {
         let whiteKeyIndex = 0;
 
-            // Draw white keys
-            // Create a Type alias or interface to for type assertions
+        // Draw white keys
         for (let i = 0; i < keys.length; i++) {
             const x = whiteKeyIndex * whiteKeyWidth;
             if (!keys[i].includes('#')) {
@@ -102,9 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Color and animation values
         const startColor = { r: 255, b: 0, g: 0, a: 1 }; // Red with full opacity
         const endColor = { r: 255, b: 0, g: 0, a: 0 }; // Red with zero opacity
-        const duration = 200; // Duration of the effect in milliseconds
         const steps = 40; // Number of steps for the fading effect
-        const interval = duration / steps;
 
 
         // Return if ctx is not null
@@ -117,7 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const animate = () => {
             const progress = currentStep / steps;
-            // const color = `rgba(255, 0, 0, ${1 - progress})`;
 
 
             // Calculate the current color based on the progress
@@ -145,10 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         }
 
-
         animate();
-
-
     }
 
 
@@ -185,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return
         }
 
-        // // Clear previous highlights
+        // Clear previous highlights
         drawKeyboard();
 
 
@@ -242,7 +235,76 @@ document.addEventListener('DOMContentLoaded', () => {
 
     }
 
+    function highlightChord(note: string, chordType: string) {
+        console.log(`Highlighting chord for note: ${note}, chord type: ${chordType}`);
 
+        // Ensure ctx is not null
+        if (!ctx) {
+            console.error("2D context is not supported by this browser");
+            return
+        }
+        
+        // Ensure canvas is not null
+        if (!canvas) {
+            console.error("Canvas element not found");
+            return
+        }
+
+        // Clear previous highlights
+        drawKeyboard();
+    
+
+        const noteIndices = {
+            'C': 0, 'C#': 1, 'D': 2, 'D#': 3, 'E': 4, 'F': 5, 'F#': 6,
+            'G': 7, 'G#': 8, 'A': 9, 'A#': 10, 'B': 11
+        };
+
+        const majorChordPattern = [0, 4, 7];
+        const startIndex = noteIndices[note as keyof typeof noteIndices];
+
+        const highlightedKeys: {x: number; width: number; height: number; type: string;}[] = [];
+
+        majorChordPattern.forEach(interval => {
+            // Calculate the key index for the note within the chromatic scale
+            const keyIndex = (startIndex + interval) % 12;
+
+            // Determine the octave and determine the actual key index on the keyboard
+            const octave = Math.floor((startIndex + interval) / 12);
+            const actualKeyIndex = keyIndex + octave * 12;
+
+            // Check if the key exists in the current layout
+            const key = keyElements[actualKeyIndex];
+
+
+            if (key) {
+                const x = key.x;
+                const width = key.width;
+                const height = key.type === 'white' ? whiteKeyHeight : blackKeyHeight;
+                highlightedKeys.push({ x, width, height, type: key.type  });
+                
+                console.log(`Highlighting key index: ${keyIndex}, x: ${x}, width: ${width}, height: ${height}`);
+
+                // Highlight key without redrawing the keyboard
+              if (key.type === 'white') {
+                ctx.fillStyle = 'red';
+                ctx.fillRect(x, 0, width, height);
+               }
+            }
+
+        });
+
+        // Redraw black keys on top after highlighting scale
+        drawBlackKeysOnTop();
+
+        // Now highlight black keys after they've been drawn
+        highlightedKeys.forEach(({ x, width, height, type }) => {
+            if (type === 'black') {
+                ctx.fillStyle = 'rgba(255, 0, 0, 0.5)';
+                ctx.fillRect(x, 0, width, height);
+            }
+        });
+
+    }
 
 
 
@@ -253,9 +315,15 @@ document.addEventListener('DOMContentLoaded', () => {
         highlightScale(note, chordType);
     });
 
+    // chordTypeSelect.addEventListener('change', () => {
+    //     const note = noteSelect.value;
+    //     const chordType = chordTypeSelect.value;
+    //     highlightScale(note, chordType);
+    // });
+
     chordTypeSelect.addEventListener('change', () => {
         const note = noteSelect.value;
         const chordType = chordTypeSelect.value;
-        highlightScale(note, chordType);
+        highlightChord(note, chordType);
     });
 });

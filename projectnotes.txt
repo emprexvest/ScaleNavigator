@@ -214,7 +214,25 @@ Updated src/drawkeyboard.ts if () { highlightedKeys.push({ x, width, height, typ
 Updated src/drawkeyboard.ts if (key.type === 'white') {...},
 Updated src/drawkeyboard.ts  // Now highlight black keys after they've been drawn,
 
-
+-09_06_24
+Removed src/drawkeyboard.ts const interval = duration / steps; const duration = 200; // Duration of the effect in milliseconds,
+Updated src/drawkeyboard.ts function highlightChord() {},
+Updated src/drawkeyboard.ts function highlightChord() {if (!ctx) {}; ...},
+Updated src/drawkeyboard.ts function highlightChord() { const noteIndices = { 'C': 0, ... },
+Updated src/drawkeyboard.ts function highlightChord() { const majorChordPattern = [0, 4, 7]; },
+Updated src/drawkeyboard.ts function highlightChord() { const startIndex = noteIndices[note as keyof typeof noteIndices]; },
+Updated src/drawkeyboard.ts function highlightChord() { const highlightedKeys: {x: number; width: number; height: number; type: string;}[] = []; },
+Updated src/drawkeyboard.ts function highlightChord() { majorChordPattern.forEach(interval => {}) },
+Updated src/drawkeyboard.ts function highlightChord() { // Calculate the key index for the note within the chromatic scale const keyIndex = (startIndex + interval) % 12; },
+Updated src/drawkeyboard.ts function highlightChord() { const octave = Math.floor((startIndex + interval) / 12); },
+Updated src/drawkeyboard.ts function highlightChord() { const actualKeyIndex = keyIndex + octave * 12;},
+Updated src/drawkeyboard.ts function highlightChord() { if (key) { const x = key.x; ... },
+Updated src/drawkeyboard.ts function highlightChord() { if (key.type === 'white') {} },
+Updated src/drawkeyboard.ts function highlightChord() { drawBlackKeysOnTop(); },
+Updated src/drawkeyboard.ts function highlightChord() { highlightedKeys.forEach(({ x, width, height, type }) => { } },
+Commented src/drawkeyboard.ts // chordTypeSelect.addEventListener('change') {},
+Updated src/drawkeyboard.ts function highlightChord() { console.log(`Highlighting chord for note: ${note}, chord type: ${chordType}`); },
+Updated src/drawkeyboard.ts chordTypeSelect.addEventListener('change', () => { highlightChord(note, chordType); },
 
 
 ---------------------------------------------------------------------

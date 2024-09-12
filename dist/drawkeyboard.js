@@ -195,10 +195,34 @@ document.addEventListener('DOMContentLoaded', () => {
             'C': 0, 'C#': 1, 'D': 2, 'D#': 3, 'E': 4, 'F': 5, 'F#': 6,
             'G': 7, 'G#': 8, 'A': 9, 'A#': 10, 'B': 11
         };
-        const majorChordPattern = [0, 4, 7];
+        // const majorChordPattern = [0, 4, 7];
         const startIndex = noteIndices[note];
+        let chordPattern = [];
+        // Switch case to select different types of chords
+        switch (chordType) {
+            case 'major':
+                chordPattern = [0, 4, 7]; // Root, Major 3rd, Perfect 5th
+                break;
+            case 'minor':
+                chordPattern = [0, 3, 7]; // Root, Minor 3rd, Perfect 5th
+                break;
+            case 'diminished':
+                chordPattern = [0, 3, 6]; // Root, Minor 3rd, Augmented 5th
+                break;
+            case 'augmented':
+                chordPattern = [0, 4, 8]; // Root, Major 3rd, Augmented 5th
+                break;
+            case 'sus2':
+                chordPattern = [0, 2, 7]; // Root, Major 2nd, Perfect 5th
+                break;
+            case 'sus4':
+                chordPattern = [0, 5, 7]; // Root, Perfect 4th, Perfect 5th
+                break;
+            default:
+                chordPattern = [0, 4, 7]; // Default to major if chord type is not recognized
+        }
         const highlightedKeys = [];
-        majorChordPattern.forEach(interval => {
+        chordPattern.forEach(interval => {
             // Calculate the key index for the note within the chromatic scale
             const keyIndex = (startIndex + interval) % 12;
             // Determine the octave and determine the actual key index on the keyboard
@@ -219,6 +243,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         });
+        // majorChordPattern.forEach(interval => {
+        //     // Calculate the key index for the note within the chromatic scale
+        //     const keyIndex = (startIndex + interval) % 12;
+        //     // Determine the octave and determine the actual key index on the keyboard
+        //     const octave = Math.floor((startIndex + interval) / 12);
+        //     const actualKeyIndex = keyIndex + octave * 12;
+        //     // Check if the key exists in the current layout
+        //     const key = keyElements[actualKeyIndex];
+        //     if (key) {
+        //         const x = key.x;
+        //         const width = key.width;
+        //         const height = key.type === 'white' ? whiteKeyHeight : blackKeyHeight;
+        //         highlightedKeys.push({ x, width, height, type: key.type  });
+        //         console.log(`Highlighting key index: ${keyIndex}, x: ${x}, width: ${width}, height: ${height}`);
+        //         // Highlight key without redrawing the keyboard
+        //       if (key.type === 'white') {
+        //         ctx.fillStyle = 'red';
+        //         ctx.fillRect(x, 0, width, height);
+        //        }
+        //     }
+        // });
         // Redraw black keys on top after highlighting scale
         drawBlackKeysOnTop();
         // Now highlight black keys after they've been drawn
@@ -239,6 +284,11 @@ document.addEventListener('DOMContentLoaded', () => {
     //     const note = noteSelect.value;
     //     const chordType = chordTypeSelect.value;
     //     highlightScale(note, chordType);
+    // });
+    // chordTypeSelect.addEventListener('change', () => {
+    //     const note = noteSelect.value;
+    //     const chordType = chordTypeSelect.value;
+    //     highlightChord(note, chordType);
     // });
     chordTypeSelect.addEventListener('change', () => {
         const note = noteSelect.value;

@@ -7,6 +7,9 @@ Libraries
 Project description:
 -Build a web app to select musical chords and recommend scales.
 
+Goal of the project:
+-To create a dynamic musical keyboard to select the appropriate chord and scale for musicians and nonmusicians.
+
 Bash commands
 npm run build
 run npm devStart
@@ -234,6 +237,15 @@ Commented src/drawkeyboard.ts // chordTypeSelect.addEventListener('change') {},
 Updated src/drawkeyboard.ts function highlightChord() { console.log(`Highlighting chord for note: ${note}, chord type: ${chordType}`); },
 Updated src/drawkeyboard.ts chordTypeSelect.addEventListener('change', () => { highlightChord(note, chordType); },
 
+-09_09_24
+
+-09_12_24
+Commented src/drawkeyboard.ts chordTypeSelect.addEventListener('change', () => { highlightChord(note, chordType); },
+Updated src/drawkeyboard.ts highlightChord() { let chordPattern: number[] = []},
+Updated src/drawkeyboard.ts highlightChord() { switch(chordType) case 'major' : chordPattern = [0, 4, 7], ..., default: chordPattern = [0, 4, 7];},
+Commented src/drawkeyboard.ts highlighChord() {majorChordPattern = []},
+Commented src/drawkeyboard.ts highlightChord() { majorChordPattern.forEach() {...}},
+Updated src/drawkeyboard.ts highlightChord() {chordPattern.forEach( {...})},
 
 ---------------------------------------------------------------------
 
